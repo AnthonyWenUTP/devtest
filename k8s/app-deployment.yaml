@@ -13,21 +13,21 @@ spec:
         app: devops-playground
     spec:
       containers:
-      - name: app
-        image: anthonywen07/devops-playground:v2
-        ports:
-          - containerPort: 3000
+        - name: app
+          image: anthonywen07/devops-playground:latest
+          ports:
+            - containerPort: 3000
+            
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
-
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
