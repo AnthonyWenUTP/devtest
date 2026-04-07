@@ -17,7 +17,13 @@ spec:
           image: anthonywen07/devops-playground:latest
           ports:
             - containerPort: 3000
-            
+
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+
           livenessProbe:
             httpGet:
               path: /health
