@@ -15,7 +15,7 @@ const pool = new Pool({
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello from DevOps Playground 🚀');
+  res.send('Version 2 🚀');
 });
 
 app.get('/health', (req, res) => {
