@@ -2,21 +2,21 @@ version: '3.8'
 
 services:
   api:
-    build: .
+    container_name: my-api
+    build: ./app
     ports:
       - "3000:3000"
     environment:
-      - PORT=3000
-      - DB_HOST=db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=devops
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: devops
     depends_on:
       - db
 
   db:
+    container_name: my-db
     image: postgres:15
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
