@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-playground
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-playground
+  template:
+    metadata:
+      labels:
+        app: devops-playground
+    spec:
+      containers:
+      - name: app
+        image: anthonywen07/devops-playground:v2
+        ports:
+          - containerPort: 3000
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
