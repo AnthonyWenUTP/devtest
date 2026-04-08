@@ -1,11 +1,18 @@
-FROM node:18
+# Use a Smaller Base Image
+FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+# Copy only API package files
+COPY app/package.json app/package-lock.json ./
 
-COPY . .
+RUN npm ci --omit=dev
+
+# Copy API source
+COPY app/ ./
+
+RUN addgroup -S app && adduser -S app -G app
+USER app
 
 EXPOSE 3000
 
