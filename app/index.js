@@ -67,10 +67,24 @@ app.get('/health', (req, res) => {
 
 app.get('/db', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW()');
-    res.json(result.rows[0]);
+    const client = await pool.connect();
+    const result = await client.query('SELECT NOW()');
+    client.release();
+
+    res.json({ time: result.rows[0] });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(JSON.stringify({
+      level: "error",
+      message: "Database connection failed",
+      error: err.message,
+      timestamp: new Date().toISOString(),
+    }));
+
+    res.status(500).json({
+      error: "Database unavailable",
+      details: err.message
+    });
   }
 });
 
