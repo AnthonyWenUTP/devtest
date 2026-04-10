@@ -1,20 +1,25 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: postgres
 spec:
+  serviceName: postgres
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app.kubernetes.io/instance: postgres
   template:
     metadata:
       labels:
-        app: postgres
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: postgres
     spec:
       containers:
         - name: postgres
           image: postgres:15
+          ports:
+            - containerPort: 5432
           env:
             - name: POSTGRES_DB
               value: devops
@@ -28,5 +33,15 @@ spec:
                 secretKeyRef:
                   name: app-secret
                   key: DB_PASSWORD
-          ports:
-            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-persistent-storage
+              mountPath: /var/lib/postgresql/data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

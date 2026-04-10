@@ -6,11 +6,18 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: devops-playground
+      app.kubernetes.io/name: devops-playground
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 1
   template:
     metadata:
       labels:
-        app: devops-playground
+        app.kubernetes.io/name: devops-playground
+        app.kubernetes.io/component: application
+        app.kubernetes.io/instance: devops-playground
     spec:
       containers:
         - name: app
@@ -37,3 +44,11 @@ spec:
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 5
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"

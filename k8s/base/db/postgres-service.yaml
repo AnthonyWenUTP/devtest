@@ -4,7 +4,7 @@ metadata:
   name: postgres
 spec:
   selector:
-    app: postgres
+    app.kubernetes.io/instance: postgres
   ports:
     - port: 5432
       targetPort: 5432
